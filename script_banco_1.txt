@@ -1,0 +1,60 @@
+CREATE TABLE tb_usuario (
+  id BIGINT IDENTITY(1,1) NOT NULL,
+  cpf VARCHAR(14),
+  nome VARCHAR(255),
+  senha VARCHAR(255),
+  ativo BIT DEFAULT 1,
+  tipo VARCHAR(10) CHECK (tipo IN ('ANALISTA', 'ALUNO')), -- Substituindo ENUM
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE tb_aula (
+  id BIGINT IDENTITY(1,1) NOT NULL,
+  sala VARCHAR(255),
+  duracao FLOAT, -- Substituindo DOUBLE
+  nome VARCHAR(255),
+  link VARCHAR(255),
+  ativo BIT DEFAULT 1,
+  id_treinamento BIGINT,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE tb_aluno_aula (
+  id BIGINT IDENTITY(1,1) NOT NULL,
+  id_aula BIGINT,
+  id_aluno BIGINT,
+  aula_concluida BIT DEFAULT 0,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE tb_apostila (
+  id BIGINT IDENTITY(1,1),
+  id_treinamento BIGINT,
+  link VARCHAR(255),
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE tb_treinamento (
+  id BIGINT IDENTITY(1,1) NOT NULL,
+  nome VARCHAR(255),
+  descricao VARCHAR(255),
+  formato VARCHAR(10) CHECK (formato IN ('PRESENCIAL', 'ONLINE')), -- Substituindo ENUM
+  ativo BIT DEFAULT 1,
+  data_inicio DATETIME,
+  data_fim DATETIME,
+  nome_professor VARCHAR(255),
+  cpf_professor VARCHAR(14),
+  PRIMARY KEY (id)
+);
+
+ALTER TABLE tb_aula 
+ADD CONSTRAINT FK_tb_aula_tb_treinamento FOREIGN KEY (id_treinamento) REFERENCES tb_treinamento(id) ON DELETE CASCADE;
+
+ALTER TABLE tb_aluno_aula 
+ADD CONSTRAINT FK_tb_aluno_aula_tb_aula FOREIGN KEY (id_aula) REFERENCES tb_aula(id) ON DELETE CASCADE;
+
+ALTER TABLE tb_aluno_aula
+ADD CONSTRAINT FK_tb_aluno_aula_tb_usuario FOREIGN KEY (id_aluno) REFERENCES tb_usuario(id) ON DELETE CASCADE;
+
+ALTER TABLE tb_apostila 
+ADD CONSTRAINT FK_tb_apostila_tb_treinamento FOREIGN KEY (id_treinamento) REFERENCES tb_treinamento(id) ON DELETE CASCADE;
