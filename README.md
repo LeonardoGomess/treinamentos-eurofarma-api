@@ -26,7 +26,4 @@ API REST desenvolvida com **Spring Boot** para gerenciamento dos treinamentos in
 - Maven
 - Lombok
 
----
-
-## 📂 Estrutura do Projeto
 
